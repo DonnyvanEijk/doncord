@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form"
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle
@@ -23,26 +22,38 @@ FormMessage
 } from '@/components/ui/form'
 import {Input} from '@/components/ui/input'
 import {Button} from '@/components/ui/button'
-import { FileUpload } from "@/components/file-upload"
 import { useRouter } from "next/navigation"
 import {useModal} from "@/hooks/use-modal-store"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+
+} from "@/components/ui/select"
+import { ChannelType } from "@prisma/client"
 
 
 const formSchema = z.object({
 name: z.string().min(1, {
-    message: "Server name is required"
-}),
-imageUrl: z.string().min(1, {
-    message: "Server icon is required"
-})
+    message: "Channel name is required"
+}).refine(
+  name => name !== "general",
+  {
+    message: "Channel name cannot be 'general'"
+  }
+),
+type: z.nativeEnum(ChannelType)
+
 })
 
 
-export const CreateServerModal = () => {
+export const CreateChannelModal = () => {
   const { isOpen, onClose, type } = useModal();
     const router = useRouter();
 
-    const isModalOpen = isOpen && type === "createServer"
+    const isModalOpen = isOpen && type === "createChannel"
 
 
 
@@ -51,7 +62,7 @@ const form = useForm({
 resolver: zodResolver(formSchema),
 defaultValues: {
     name: "",
-    imageUrl: ""
+   
 
 }
 });
@@ -83,12 +94,9 @@ return (
     <DialogContent className="bg-white text-black p-0 overflow-hidden">
       <DialogHeader className="pt-8 px-6">
         <DialogTitle className="text-2xl text-center font-bold">
-          Customize your server
+         Create channel
         </DialogTitle>
-        <DialogDescription className="text-center text-zinc-500">
-          Give your server a name and a image as a icon so your server has some
-          personality. You can always chage this later
-        </DialogDescription>
+  
       </DialogHeader>
       <Form {...form}>
         <form
@@ -97,27 +105,7 @@ return (
     space-y-8"
         >
           <div className="space-y-8 px-6">
-            <div className="flex items-center justify-center text-center">
-              <FormField
-              control = {form.control}
-              name="imageUrl"
-             render={({ field }) => (
-                <FormItem>
-                    <FormControl>
-                       <FileUpload
-                       endpoint="serverImage"
-                       value={field.value}
-                       onChange={field.onChange}
-                       />
-                    </FormControl>
-                </FormItem>
-             )}
-              
-              />
-
-             
-             
-            </div>
+           
 
             <FormField
               control={form.control}
@@ -126,7 +114,7 @@ return (
 
                 <FormItem>
                     <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
-                        Server name
+                        Channel name
                      </FormLabel>
                      <FormControl>
                         <Input
@@ -134,7 +122,7 @@ return (
                         className="bg-zinc-300/50 border-0
                         focus-visible:ring-0 text-black
                         focus-visible:ring-offset-0"
-                        placeholder="Enter a server name"
+                        placeholder="Enter channel name"
                         {...field}
                         />
                      </FormControl>
