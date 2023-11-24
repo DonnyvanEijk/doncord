@@ -4,8 +4,6 @@ import { MobileToggle } from "@/components/mobile-toggle";
 import { UserAvatar } from "@/components/user-avatar";
 import { SocketIndicator } from "@/components/socket-indicator";
 
-
-
 interface ChatHeaderProps {
   serverId: string;
   name: string;
@@ -35,7 +33,6 @@ export const ChatHeader = ({
         {name}
       </p>
       <div className="ml-auto flex items-center">
-       
         <SocketIndicator />
       </div>
     </div>

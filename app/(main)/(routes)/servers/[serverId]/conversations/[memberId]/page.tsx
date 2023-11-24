@@ -1,26 +1,20 @@
 import { redirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
-import { db } from "@/lib/db";
 import { getOrCreateConversation } from "@/lib/conversation";
 import { currentProfile } from "@/lib/current-profile";
+import { db } from "@/lib/db";
 import { ChatHeader } from "@/components/chat/chat-header";
-
-
 
 interface MemberIdPageProps {
   params: {
     memberId: string;
     serverId: string;
-  },
-  searchParams: {
-    video?: boolean;
   }
 }
 
 const MemberIdPage = async ({
-  params,
-  searchParams,
+  params
 }: MemberIdPageProps) => {
   const profile = await currentProfile();
 
@@ -60,7 +54,6 @@ const MemberIdPage = async ({
         serverId={params.serverId}
         type="conversation"
       />
-   
     </div>
    );
 }
